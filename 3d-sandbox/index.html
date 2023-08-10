@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
-    <!--app-head-->
-  </head>
-  <body>
-    <div id="root"><!--app-html--></div>
-    <script type="module" src="/src/entry-client.jsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vite + React</title>
+</head>
+<body>
+  <div id="root"></div>
+  
+  <script type="module">
+    import React from 'react';
+    import ReactDOM from 'react-dom';
+    import App from './src/App'; // Adjust the path as needed
+
+    ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
+</body>
 </html>
