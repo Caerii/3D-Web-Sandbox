@@ -25,8 +25,7 @@
             await init();
             
             const sim = new Simulation();
-            // Note: In real impl, we'd pass the canvas ID
-            // await sim.init_graphics("simCanvas"); 
+            await sim.init_graphics("simCanvas"); 
 
             const spawnBtn = document.getElementById('spawnBtn');
             spawnBtn.addEventListener('click', () => {
