@@ -26,6 +26,8 @@ except ImportError:
             print(f"Rust: spawn_box({x}, {y}, {z})")
         def spawn_sphere(self, x, y, z):
             print(f"Rust: spawn_sphere({x}, {y}, {z})")
+        def spawn_liquid(self, x, y, z):
+            print(f"Rust: spawn_liquid({x}, {y}, {z})")
         def spawn_floor(self):
             print("Rust: spawn_floor()")
         def step(self):
@@ -74,6 +76,7 @@ def main():
     sim = instance.Simulation() 
     sim.spawn_floor()
     sim.spawn_sphere(0, 10, 0)
+    sim.spawn_liquid(2, 5, 2)
     
     print("Simulation started.")
     

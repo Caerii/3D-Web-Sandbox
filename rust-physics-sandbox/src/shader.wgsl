@@ -61,7 +61,10 @@ fn vs_main(
     
     // Color based on object type
     var base_color = vec3<f32>(0.8, 0.2, 0.2); // Default Red
-    if (model.model_pos.y < -1.0) { // Hack: if it's the floor (usually low y)
+    if (model.obj_type > 1.9 && model.obj_type < 2.1) { 
+         // Type 2: Liquid (Blue)
+         base_color = vec3<f32>(0.2, 0.5, 0.9);
+    } else if (model.model_pos.y < -1.0) { // Hack: if it's the floor (usually low y)
          base_color = vec3<f32>(0.3, 0.3, 0.3);
     } else {
          // Random-ish color based on position for variety

@@ -1,0 +1,11 @@
+/workspace/rust-physics-sandbox/target/debug/deps/liblinux_raw_sys-9964581291326d1c.rmeta: /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/linux-raw-sys-0.4.15/src/lib.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/linux-raw-sys-0.4.15/src/elf.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/linux-raw-sys-0.4.15/src/x86_64/errno.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/linux-raw-sys-0.4.15/src/x86_64/general.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/linux-raw-sys-0.4.15/src/x86_64/ioctl.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/linux-raw-sys-0.4.15/src/x86_64/prctl.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/linux-raw-sys-0.4.15/src/x86_64/system.rs
+
+/workspace/rust-physics-sandbox/target/debug/deps/linux_raw_sys-9964581291326d1c.d: /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/linux-raw-sys-0.4.15/src/lib.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/linux-raw-sys-0.4.15/src/elf.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/linux-raw-sys-0.4.15/src/x86_64/errno.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/linux-raw-sys-0.4.15/src/x86_64/general.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/linux-raw-sys-0.4.15/src/x86_64/ioctl.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/linux-raw-sys-0.4.15/src/x86_64/prctl.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/linux-raw-sys-0.4.15/src/x86_64/system.rs
+
+/usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/linux-raw-sys-0.4.15/src/lib.rs:
+/usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/linux-raw-sys-0.4.15/src/elf.rs:
+/usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/linux-raw-sys-0.4.15/src/x86_64/errno.rs:
+/usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/linux-raw-sys-0.4.15/src/x86_64/general.rs:
+/usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/linux-raw-sys-0.4.15/src/x86_64/ioctl.rs:
+/usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/linux-raw-sys-0.4.15/src/x86_64/prctl.rs:
+/usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/linux-raw-sys-0.4.15/src/x86_64/system.rs:

@@ -31,6 +31,12 @@ export class Simulation {
 */
   spawn_floor(): void;
 /**
+* @param {number} x
+* @param {number} y
+* @param {number} z
+*/
+  spawn_liquid(x: number, y: number, z: number): void;
+/**
 * @returns {number}
 */
   get_first_object_y(): number;
@@ -47,6 +53,7 @@ export interface InitOutput {
   readonly simulation_spawn_box: (a: number, b: number, c: number, d: number) => void;
   readonly simulation_spawn_sphere: (a: number, b: number, c: number, d: number) => void;
   readonly simulation_spawn_floor: (a: number) => void;
+  readonly simulation_spawn_liquid: (a: number, b: number, c: number, d: number) => void;
   readonly simulation_get_first_object_y: (a: number) => number;
   readonly wgpu_compute_pass_set_pipeline: (a: number, b: number) => void;
   readonly wgpu_compute_pass_set_bind_group: (a: number, b: number, c: number, d: number, e: number) => void;

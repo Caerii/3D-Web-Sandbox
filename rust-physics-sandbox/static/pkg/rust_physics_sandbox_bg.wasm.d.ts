@@ -8,6 +8,7 @@ export function simulation_step(a: number): void;
 export function simulation_spawn_box(a: number, b: number, c: number, d: number): void;
 export function simulation_spawn_sphere(a: number, b: number, c: number, d: number): void;
 export function simulation_spawn_floor(a: number): void;
+export function simulation_spawn_liquid(a: number, b: number, c: number, d: number): void;
 export function simulation_get_first_object_y(a: number): number;
 export function wgpu_compute_pass_set_pipeline(a: number, b: number): void;
 export function wgpu_compute_pass_set_bind_group(a: number, b: number, c: number, d: number, e: number): void;

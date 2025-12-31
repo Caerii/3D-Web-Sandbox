@@ -57,6 +57,10 @@ impl Simulation {
     pub fn spawn_floor(&mut self) {
         self.physics.spawn_floor();
     }
+    
+    pub fn spawn_liquid(&mut self, x: f32, y: f32, z: f32) {
+        self.physics.spawn_liquid(x, y, z);
+    }
 
     pub fn get_first_object_y(&self) -> f32 {
         self.physics.get_first_object_y()

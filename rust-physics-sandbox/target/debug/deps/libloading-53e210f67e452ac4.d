@@ -1,0 +1,12 @@
+/workspace/rust-physics-sandbox/target/debug/deps/liblibloading-53e210f67e452ac4.rmeta: /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/libloading-0.7.4/src/lib.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/libloading-0.7.4/src/changelog.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/libloading-0.7.4/src/os/mod.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/libloading-0.7.4/src/os/unix/mod.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/libloading-0.7.4/src/os/unix/consts.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/libloading-0.7.4/src/util.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/libloading-0.7.4/src/error.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/libloading-0.7.4/src/safe.rs
+
+/workspace/rust-physics-sandbox/target/debug/deps/libloading-53e210f67e452ac4.d: /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/libloading-0.7.4/src/lib.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/libloading-0.7.4/src/changelog.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/libloading-0.7.4/src/os/mod.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/libloading-0.7.4/src/os/unix/mod.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/libloading-0.7.4/src/os/unix/consts.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/libloading-0.7.4/src/util.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/libloading-0.7.4/src/error.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/libloading-0.7.4/src/safe.rs
+
+/usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/libloading-0.7.4/src/lib.rs:
+/usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/libloading-0.7.4/src/changelog.rs:
+/usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/libloading-0.7.4/src/os/mod.rs:
+/usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/libloading-0.7.4/src/os/unix/mod.rs:
+/usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/libloading-0.7.4/src/os/unix/consts.rs:
+/usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/libloading-0.7.4/src/util.rs:
+/usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/libloading-0.7.4/src/error.rs:
+/usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/libloading-0.7.4/src/safe.rs:

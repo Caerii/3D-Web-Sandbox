@@ -1,0 +1,14 @@
+/workspace/rust-physics-sandbox/target/debug/deps/libwgpu-b711327abce7549f.rmeta: /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-0.19.4/src/lib.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-0.19.4/src/backend/mod.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-0.19.4/src/backend/wgpu_core.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-0.19.4/src/context.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-0.19.4/src/util/mod.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-0.19.4/src/util/belt.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-0.19.4/src/util/device.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-0.19.4/src/util/encoder.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-0.19.4/src/util/init.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-0.19.4/src/macros.rs
+
+/workspace/rust-physics-sandbox/target/debug/deps/wgpu-b711327abce7549f.d: /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-0.19.4/src/lib.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-0.19.4/src/backend/mod.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-0.19.4/src/backend/wgpu_core.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-0.19.4/src/context.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-0.19.4/src/util/mod.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-0.19.4/src/util/belt.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-0.19.4/src/util/device.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-0.19.4/src/util/encoder.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-0.19.4/src/util/init.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-0.19.4/src/macros.rs
+
+/usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-0.19.4/src/lib.rs:
+/usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-0.19.4/src/backend/mod.rs:
+/usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-0.19.4/src/backend/wgpu_core.rs:
+/usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-0.19.4/src/context.rs:
+/usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-0.19.4/src/util/mod.rs:
+/usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-0.19.4/src/util/belt.rs:
+/usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-0.19.4/src/util/device.rs:
+/usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-0.19.4/src/util/encoder.rs:
+/usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-0.19.4/src/util/init.rs:
+/usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wgpu-0.19.4/src/macros.rs:
