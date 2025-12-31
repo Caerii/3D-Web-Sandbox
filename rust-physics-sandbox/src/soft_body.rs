@@ -1,3 +1,4 @@
+use rapier3d::prelude::{QueryPipeline, ColliderSet, RigidBodySet, InteractionGroups, Point, Ray, QueryFilter};
 use nalgebra::{Vector3, Point3};
 
 #[derive(Clone, Copy)]
@@ -94,7 +95,10 @@ impl SoftBody {
         });
     }
 
-    pub fn step(&mut self, dt: f32, gravity: &Vector3<f32>) {
+    pub fn step(&mut self, dt: f32, gravity: &Vector3<f32>, 
+                query_pipeline: &QueryPipeline, 
+                colliders: &ColliderSet, 
+                rigid_bodies: &RigidBodySet) {
         // 1. Apply gravity and external forces
         for p in &mut self.particles {
             if p.pinned { continue; }
@@ -137,18 +141,80 @@ impl SoftBody {
             }
         }
 
-        // 3. Integrate position
+        // 3. Integrate position & Resolve Collisions
+        let particle_radius = 0.1; // Treat particle as having radius
+        
         for p in &mut self.particles {
             if p.pinned { continue; }
-            p.position += p.velocity * dt;
+            
+            // Proposed new position
+            let mut new_pos = p.position + p.velocity * dt;
             
             // Floor collision (simple)
-            if p.position.y < 0.0 {
-                p.position.y = 0.0;
+            if new_pos.y < 0.0 {
+                new_pos.y = 0.0;
                 p.velocity.y = 0.0;
                 p.velocity.x *= 0.9; // Friction
                 p.velocity.z *= 0.9;
             }
+            
+            // Rigid Body Collision (Rapier)
+            // We use project_point against the world
+            // We search for points within a small margin
+            let query_filter = QueryFilter::default().groups(InteractionGroups::all());
+            
+            // Rapier's project_point returns the closest point on any collider
+            // However, doing this for every particle every frame is expensive (O(N_particles * log(N_colliders)))
+            // Optimization: Only check if close to something (broadphase) - but project_point does that internally.
+            
+            let point = Point::new(new_pos.x, new_pos.y, new_pos.z);
+            let solid = true;
+            
+            if let Some((handle, projection)) = query_pipeline.project_point(
+                rigid_bodies,
+                colliders,
+                &point,
+                solid,
+                query_filter
+            ) {
+                // If the point is inside the collider, projection.is_inside is true.
+                // Or if distance is small.
+                // We want to keep particle outside by 'particle_radius'.
+                
+                let dist = point.coords.metric_distance(&projection.point.coords);
+                
+                if projection.is_inside {
+                    // Deep penetration, push out to surface + radius
+                    let normal = (point.coords - projection.point.coords).normalize(); // Might be zero if exact center?
+                    // If inside, point might be same or different. 
+                    // Actually Rapier returns a point on boundary.
+                    // If is_inside, the normal might need to be derived or we assume projection.point is nearest surface.
+                    // We push to projection.point
+                    
+                    // Simple Push: Set position to surface point
+                    new_pos = Point3::from(projection.point);
+                    
+                    // Add radius buffer
+                    // We need a normal. If is_inside, vector from particle to surface? No, particle is inside.
+                    // Usually we want normal of surface. project_point returns FeatureId but not normal directly in this call?
+                    // Wait, PointProjection struct has .point (on collider).
+                    // We don't get normal easily here without another call.
+                    // Let's just push to surface for now.
+                    
+                    // Kill velocity normal to collision?
+                    p.velocity *= 0.5; // Damping on collision
+                } else if dist < particle_radius {
+                    // Close to surface, push out
+                    let normal = (point.coords - projection.point.coords).normalize();
+                    let correction = normal * (particle_radius - dist);
+                    new_pos += correction;
+                    
+                    // Friction/Damping
+                    p.velocity *= 0.9; 
+                }
+            }
+            
+            p.position = new_pos;
         }
     }
 }

@@ -113,7 +113,13 @@ impl PhysicsWorld {
         
         // Step Soft Body Physics
         let gravity_vec = Vector3::new(self.gravity.x, self.gravity.y, self.gravity.z);
-        self.soft_body.step(dt, &gravity_vec);
+        self.soft_body.step(
+            dt, 
+            &gravity_vec, 
+            &self.query_pipeline, 
+            &self.collider_set, 
+            &self.rigid_body_set
+        );
     }
 
     pub fn spawn_box(&mut self, x: f32, y: f32, z: f32) {
