@@ -261,7 +261,7 @@ function getArrayF32FromWasm0(ptr, len) {
     ptr = ptr >>> 0;
     return getFloat32Memory0().subarray(ptr / 4, ptr / 4 + len);
 }
-function __wbg_adapter_858(arg0, arg1, arg2, arg3) {
+function __wbg_adapter_859(arg0, arg1, arg2, arg3) {
     wasm.wasm_bindgen__convert__closures__invoke2_mut__h1cb519eab5677b7b(arg0, arg1, addHeapObject(arg2), addHeapObject(arg3));
 }
 
@@ -330,6 +330,14 @@ export class Simulation {
     */
     spawn_liquid(x, y, z) {
         wasm.simulation_spawn_liquid(this.__wbg_ptr, x, y, z);
+    }
+    /**
+    * @param {number} x
+    * @param {number} y
+    * @param {number} z
+    */
+    spawn_cloth(x, y, z) {
+        wasm.simulation_spawn_cloth(this.__wbg_ptr, x, y, z);
     }
     /**
     * @returns {number}
@@ -1904,7 +1912,7 @@ function __wbg_get_imports() {
                 const a = state0.a;
                 state0.a = 0;
                 try {
-                    return __wbg_adapter_858(a, state0.b, arg0, arg1);
+                    return __wbg_adapter_859(a, state0.b, arg0, arg1);
                 } finally {
                     state0.a = a;
                 }
@@ -1992,15 +2000,15 @@ function __wbg_get_imports() {
         const ret = wasm.memory;
         return addHeapObject(ret);
     };
-    imports.wbg.__wbindgen_closure_wrapper2049 = function(arg0, arg1, arg2) {
+    imports.wbg.__wbindgen_closure_wrapper2054 = function(arg0, arg1, arg2) {
         const ret = makeMutClosure(arg0, arg1, 894, __wbg_adapter_30);
         return addHeapObject(ret);
     };
-    imports.wbg.__wbindgen_closure_wrapper2051 = function(arg0, arg1, arg2) {
+    imports.wbg.__wbindgen_closure_wrapper2056 = function(arg0, arg1, arg2) {
         const ret = makeMutClosure(arg0, arg1, 894, __wbg_adapter_30);
         return addHeapObject(ret);
     };
-    imports.wbg.__wbindgen_closure_wrapper2874 = function(arg0, arg1, arg2) {
+    imports.wbg.__wbindgen_closure_wrapper2879 = function(arg0, arg1, arg2) {
         const ret = makeMutClosure(arg0, arg1, 1031, __wbg_adapter_35);
         return addHeapObject(ret);
     };

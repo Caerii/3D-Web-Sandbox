@@ -28,6 +28,8 @@ except ImportError:
             print(f"Rust: spawn_sphere({x}, {y}, {z})")
         def spawn_liquid(self, x, y, z):
             print(f"Rust: spawn_liquid({x}, {y}, {z})")
+        def spawn_cloth(self, x, y, z, w, h):
+            print(f"Rust: spawn_cloth({x}, {y}, {z})")
         def spawn_floor(self):
             print("Rust: spawn_floor()")
         def step(self):
@@ -75,27 +77,37 @@ def main():
     
     sim = instance.Simulation() 
     sim.spawn_floor()
-    sim.spawn_sphere(0, 10, 0)
-    sim.spawn_liquid(2, 5, 2)
     
+    # Scenario: Build a tower
+    print("Agent: Building tower...")
+    for i in range(5):
+        sim.spawn_box(0, 0.5 + i * 1.1, 0)
+        time.sleep(0.1) # Brief pause to let physics settle slightly
+        
+    print("Agent: Spawning Cloth...")
+    try:
+        sim.spawn_cloth(0, 8, 0, 10, 10)
+    except Exception:
+        print("MockSim does not support spawn_cloth")
+
     print("Simulation started.")
     
     # Agent Loop
     count = 0
-    while count < 100: # Limit loop for testing
+    while count < 300: 
         sim.step()
         
         # Read sensor data from Rust
         y_pos = sim.get_first_object_y()
         
-        # Simple Logic: If object falls below 0, respawn it high
-        if y_pos < -5.0:
-            print("Agent: Object fell off world! Respawning...")
-            sim.spawn_sphere(0, 10, 0)
+        # Event: At tick 100, pour water
+        if count == 100:
+            print("Agent: Pouring water to knock down tower!")
+            sim.spawn_liquid(0.5, 8, 0)
         
         # Log occasionally
-        if count % 20 == 0:
-            print(f"Agent: Object Y={y_pos:.2f}")
+        if count % 60 == 0:
+            print(f"Agent: Tick {count}, Object Y={y_pos:.2f}")
         
         time.sleep(0.016) # ~60 FPS
         count += 1

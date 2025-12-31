@@ -64,6 +64,9 @@ fn vs_main(
     if (model.obj_type > 1.9 && model.obj_type < 2.1) { 
          // Type 2: Liquid (Blue)
          base_color = vec3<f32>(0.2, 0.5, 0.9);
+    } else if (model.obj_type > 2.9 && model.obj_type < 3.1) {
+         // Type 3: Soft Body (Purple)
+         base_color = vec3<f32>(0.7, 0.2, 0.8);
     } else if (model.model_pos.y < -1.0) { // Hack: if it's the floor (usually low y)
          base_color = vec3<f32>(0.3, 0.3, 0.3);
     } else {

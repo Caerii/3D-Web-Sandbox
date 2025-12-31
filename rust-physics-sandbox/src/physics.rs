@@ -2,7 +2,8 @@ use rapier3d::prelude::*;
 use std::collections::HashMap;
 use salva3d::integrations::rapier::FluidsPipeline;
 use salva3d::object::{Fluid, FluidHandle};
-use nalgebra::Point3;
+use nalgebra::{Point3, Vector3};
+use crate::soft_body::SoftBody;
 
 pub struct PhysicsWorld {
     pub pipeline: PhysicsPipeline,
@@ -21,6 +22,9 @@ pub struct PhysicsWorld {
     // Salva Fluid Physics
     pub fluid_pipeline: FluidsPipeline,
     pub fluid_handle: FluidHandle, // Keep track of our main water body
+    
+    // Soft Body
+    pub soft_body: SoftBody,
     
     // Keep track of what we spawned to categorize them for rendering
     // Map RigidBodyHandle -> ObjectType (0: box, 1: sphere)
@@ -67,6 +71,8 @@ impl PhysicsWorld {
             fluid_pipeline,
             fluid_handle,
             
+            soft_body: SoftBody::new(),
+            
             object_types: HashMap::new(),
         }
     }
@@ -104,6 +110,10 @@ impl PhysicsWorld {
             &self.collider_set,
             &mut self.rigid_body_set,
         );
+        
+        // Step Soft Body Physics
+        let gravity_vec = Vector3::new(self.gravity.x, self.gravity.y, self.gravity.z);
+        self.soft_body.step(dt, &gravity_vec);
     }
 
     pub fn spawn_box(&mut self, x: f32, y: f32, z: f32) {
@@ -156,6 +166,12 @@ impl PhysicsWorld {
         // Add particles to our existing fluid
         let fluid = self.fluid_pipeline.liquid_world.fluids_mut().get_mut(self.fluid_handle).unwrap();
         fluid.add_particles(&particles, None);
+    }
+
+    pub fn spawn_cloth(&mut self, x: f32, y: f32, z: f32, width: usize, height: usize) {
+        let spacing = 0.2;
+        let offset = Vector3::new(x, y, z);
+        self.soft_body.create_cloth(width, height, spacing, offset);
     }
 
     pub fn cast_ray(&self, origin_x: f32, origin_y: f32, origin_z: f32, dir_x: f32, dir_y: f32, dir_z: f32) -> Option<u32> {
@@ -254,6 +270,18 @@ impl PhysicsWorld {
                 data.push(1.0); // qw
                 data.push(2.0); // Type 2 = Liquid
             }
+        }
+        
+        // Soft Body Particles (type 3)
+        for particle in &self.soft_body.particles {
+            data.push(particle.position.x);
+            data.push(particle.position.y);
+            data.push(particle.position.z);
+            data.push(0.0); // qx
+            data.push(0.0); // qy
+            data.push(0.0); // qz
+            data.push(1.0); // qw
+            data.push(3.0); // Type 3 = Soft Body
         }
         
         data

@@ -1,6 +1,7 @@
 mod physics;
 mod render;
 mod utils;
+mod soft_body;
 
 use wasm_bindgen::prelude::*;
 use std::cell::RefCell;
@@ -60,6 +61,10 @@ impl Simulation {
     
     pub fn spawn_liquid(&mut self, x: f32, y: f32, z: f32) {
         self.physics.spawn_liquid(x, y, z);
+    }
+    
+    pub fn spawn_cloth(&mut self, x: f32, y: f32, z: f32) {
+        self.physics.spawn_cloth(x, y, z, 10, 10);
     }
 
     pub fn get_first_object_y(&self) -> f32 {

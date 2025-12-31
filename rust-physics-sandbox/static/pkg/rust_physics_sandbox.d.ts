@@ -37,6 +37,12 @@ export class Simulation {
 */
   spawn_liquid(x: number, y: number, z: number): void;
 /**
+* @param {number} x
+* @param {number} y
+* @param {number} z
+*/
+  spawn_cloth(x: number, y: number, z: number): void;
+/**
 * @returns {number}
 */
   get_first_object_y(): number;
@@ -65,6 +71,7 @@ export interface InitOutput {
   readonly simulation_spawn_sphere: (a: number, b: number, c: number, d: number) => void;
   readonly simulation_spawn_floor: (a: number) => void;
   readonly simulation_spawn_liquid: (a: number, b: number, c: number, d: number) => void;
+  readonly simulation_spawn_cloth: (a: number, b: number, c: number, d: number) => void;
   readonly simulation_get_first_object_y: (a: number) => number;
   readonly simulation_update_camera: (a: number, b: number, c: number, d: number) => void;
   readonly simulation_handle_click: (a: number, b: number, c: number) => void;

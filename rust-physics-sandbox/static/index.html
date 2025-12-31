@@ -15,6 +15,7 @@
         <h3>Controls</h3>
         <button id="spawnBtn">Spawn Box</button>
         <button id="spawnWaterBtn">Spawn Water</button>
+        <button id="spawnClothBtn">Spawn Cloth</button>
         <p>FPS: <span id="fps">0</span></p>
     </div>
     <canvas id="simCanvas"></canvas>
@@ -36,6 +37,11 @@
             const spawnWaterBtn = document.getElementById('spawnWaterBtn');
             spawnWaterBtn.addEventListener('click', () => {
                 sim.spawn_liquid(0, 10, 0);
+            });
+            
+            const spawnClothBtn = document.getElementById('spawnClothBtn');
+            spawnClothBtn.addEventListener('click', () => {
+                sim.spawn_cloth(2, 8, 0);
             });
             
             // Add initial floor and sphere
