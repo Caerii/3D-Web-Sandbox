@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rust + WebGPU Physics Sandbox</title>
+    <style>
+        body { margin: 0; overflow: hidden; background: #111; color: white; font-family: sans-serif; }
+        canvas { display: block; width: 100vw; height: 100vh; }
+        #ui { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div id="ui">
+        <h3>Controls</h3>
+        <button id="spawnBtn">Spawn Box</button>
+        <p>FPS: <span id="fps">0</span></p>
+    </div>
+    <canvas id="simCanvas"></canvas>
+
+    <script type="module">
+        import init, { Simulation } from './pkg/rust_physics_sandbox.js';
+
+        async function run() {
+            await init();
+            
+            const sim = new Simulation();
+            // Note: In real impl, we'd pass the canvas ID
+            // await sim.init_graphics("simCanvas"); 
+
+            const spawnBtn = document.getElementById('spawnBtn');
+            spawnBtn.addEventListener('click', () => {
+                sim.spawn_box(Math.random() * 4 - 2, 10, Math.random() * 4 - 2);
+            });
+
+            function loop() {
+                sim.step();
+                requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        run().catch(console.error);
+    </script>
+</body>
+</html>
