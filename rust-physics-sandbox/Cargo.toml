@@ -1,0 +1,43 @@
+[package]
+name = "rust-physics-sandbox"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+# WebAssembly interaction
+wasm-bindgen = "=0.2.90"
+console_error_panic_hook = "0.1.7"
+
+# Physics
+rapier3d = { version = "0.18.0", features = ["wasm-bindgen"] }
+salva3d = { version = "0.9.0", features = ["wasm-bindgen", "rapier"] }
+nalgebra = "0.32.3"
+
+# Graphics (WebGPU)
+wgpu = { version = "0.19.0", features = ["webgl"] }
+winit = { version = "0.29.10", features = ["rwh_05"] }
+bytemuck = { version = "1.14.3", features = ["derive"] }
+pollster = "0.3.0"
+env_logger = "0.11.1"
+log = "0.4.20"
+
+# Async
+wasm-bindgen-futures = "0.4.40"
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+js-sys = "0.3.67"
+web-sys = { version = "0.3.67", features = [
+    "Document",
+    "Window",
+    "Element",
+    "HtmlCanvasElement",
+    "console",
+    "Performance", 
+    "WebSocket",
+    "MessageEvent",
+    "ErrorEvent",
+] }

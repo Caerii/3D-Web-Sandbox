@@ -1,0 +1,10 @@
+/workspace/rust-physics-sandbox/target/debug/deps/libwayland_protocols-f3e186cda4a161be.rmeta: /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wayland-protocols-0.31.2/src/lib.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wayland-protocols-0.31.2/src/protocol_macro.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wayland-protocols-0.31.2/src/ext.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wayland-protocols-0.31.2/src/wp.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wayland-protocols-0.31.2/src/xdg.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wayland-protocols-0.31.2/src/xwayland.rs
+
+/workspace/rust-physics-sandbox/target/debug/deps/wayland_protocols-f3e186cda4a161be.d: /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wayland-protocols-0.31.2/src/lib.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wayland-protocols-0.31.2/src/protocol_macro.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wayland-protocols-0.31.2/src/ext.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wayland-protocols-0.31.2/src/wp.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wayland-protocols-0.31.2/src/xdg.rs /usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wayland-protocols-0.31.2/src/xwayland.rs
+
+/usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wayland-protocols-0.31.2/src/lib.rs:
+/usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wayland-protocols-0.31.2/src/protocol_macro.rs:
+/usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wayland-protocols-0.31.2/src/ext.rs:
+/usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wayland-protocols-0.31.2/src/wp.rs:
+/usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wayland-protocols-0.31.2/src/xdg.rs:
+/usr/local/cargo/registry/src/index.crates.io-6f17d22bba15001f/wayland-protocols-0.31.2/src/xwayland.rs:

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rust + WebGPU Physics Sandbox</title>
+    <style>
+        body { margin: 0; overflow: hidden; background: #111; color: white; font-family: sans-serif; }
+        canvas { display: block; width: 100vw; height: 100vh; }
+        #ui { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div id="ui">
+        <h3>Controls</h3>
+        <button id="spawnBtn">Spawn Box</button>
+        <button id="spawnWaterBtn">Spawn Water</button>
+        <button id="spawnClothBtn">Spawn Cloth</button>
+        <hr/>
+        <button id="avalancheBtn" style="background: red;">AVALANCHE</button>
+        <button id="tsunamiBtn" style="background: blue;">TSUNAMI</button>
+        <p>FPS: <span id="fps">0</span></p>
+    </div>
+    <canvas id="simCanvas"></canvas>
+
+    <script type="module">
+        import init, { Simulation } from './pkg/rust_physics_sandbox.js';
+
+        async function run() {
+            await init();
+            
+            const sim = new Simulation();
+            await sim.init_graphics("simCanvas"); 
+
+            const spawnBtn = document.getElementById('spawnBtn');
+            spawnBtn.addEventListener('click', () => {
+                sim.spawn_box(Math.random() * 4 - 2, 10, Math.random() * 4 - 2);
+            });
+            
+            const spawnWaterBtn = document.getElementById('spawnWaterBtn');
+            spawnWaterBtn.addEventListener('click', () => {
+                sim.spawn_liquid(0, 10, 0);
+            });
+            
+            const spawnClothBtn = document.getElementById('spawnClothBtn');
+            spawnClothBtn.addEventListener('click', () => {
+                sim.spawn_cloth(2, 8, 0);
+            });
+            
+            document.getElementById('avalancheBtn').addEventListener('click', () => {
+                sim.spawn_avalanche(0, 10, 0);
+            });
+            
+            document.getElementById('tsunamiBtn').addEventListener('click', () => {
+                sim.spawn_tsunami(0, 10, 0);
+            });
+            
+            // Add initial floor and sphere
+            sim.spawn_floor();
+            sim.spawn_sphere(0, 5, 0);
+            
+            // Connect to Orchestrator
+            try {
+                sim.connect_orchestrator();
+                console.log("Connected to Orchestrator");
+            } catch (e) {
+                console.warn("Orchestrator not found (is the python script running?)", e);
+            }
+            
+            // Camera Controls
+            const canvas = document.getElementById('simCanvas');
+            let isDragging = false;
+            let lastX = 0;
+            let lastY = 0;
+            
+            canvas.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                lastX = e.clientX;
+                lastY = e.clientY;
+                
+                // Handle clicking (picking)
+                // Note: we might want to distinguish click vs drag, but for now click is fine
+                // Pass coordinates to Rust
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                sim.handle_click(x, y);
+            });
+            
+            window.addEventListener('mouseup', () => {
+                isDragging = false;
+            });
+            
+            canvas.addEventListener('mousemove', (e) => {
+                if (isDragging) {
+                    const dx = e.clientX - lastX;
+                    const dy = e.clientY - lastY;
+                    sim.update_camera(dx, dy, 0);
+                    lastX = e.clientX;
+                    lastY = e.clientY;
+                }
+            });
+            
+            canvas.addEventListener('wheel', (e) => {
+                sim.update_camera(0, 0, e.deltaY * 0.05);
+            });
+
+            let lastFrameTime = performance.now();
+            let frameCount = 0;
+            let lastFpsUpdate = 0;
+            const fpsElem = document.getElementById('fps');
+
+            function loop() {
+                const now = performance.now();
+                
+                // Update FPS every second
+                frameCount++;
+                if (now - lastFpsUpdate >= 1000) {
+                    fpsElem.innerText = frameCount;
+                    frameCount = 0;
+                    lastFpsUpdate = now;
+                }
+
+                sim.step();
+                requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        run().catch(console.error);
+    </script>
+</body>
+</html>
