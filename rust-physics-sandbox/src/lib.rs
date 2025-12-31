@@ -6,6 +6,21 @@ mod soft_body;
 use wasm_bindgen::prelude::*;
 use std::cell::RefCell;
 use std::rc::Rc;
+use wasm_bindgen::closure::Closure;
+use web_sys::{ErrorEvent, MessageEvent, WebSocket};
+use serde::{Deserialize, Serialize};
+
+#[derive(Serialize, Deserialize)]
+struct SimCommand {
+    cmd: String,
+    x: Option<f32>,
+    y: Option<f32>,
+    z: Option<f32>,
+}
+
+thread_local! {
+    static CMD_QUEUE: RefCell<Vec<String>> = RefCell::new(Vec::new());
+}
 
 #[wasm_bindgen]
 extern "C" {
@@ -37,7 +52,59 @@ impl Simulation {
         Ok(())
     }
 
+    // Connect to WebSocket orchestrator
+    pub fn connect_orchestrator(&self) -> Result<(), JsValue> {
+        let ws = WebSocket::new("ws://localhost:8765")?;
+        
+        // We need a way to call methods on 'self' from the closure.
+        // However, 'self' is passed by value or reference to WASM, handling lifetimes is tricky.
+        // The standard pattern is to use a global or a handle.
+        // Since 'Simulation' is owned by JS, we can't easily capture 'self' in a closure that lives longer.
+        // 
+        // Alternative: The WebSocket puts messages into a queue, and 'step()' processes them.
+        // This avoids callback hell and borrowing issues.
+        
+        // Let's attach the queue to the Simulation struct? 
+        // But Simulation is moved to JS.
+        // We can use a static RefCell queue? Or just pass a closure that calls a global function?
+        
+        // Ideally, we want: on_message -> queue.push(msg)
+        // step() -> while let Some(msg) = queue.pop() { handle(msg) }
+        
+        // Hack: Use a window-level queue in JS, or just use a static mutex in Rust.
+        // Let's use a static queue for simplicity in this demo.
+        
+        let onmessage_callback = Closure::<dyn FnMut(_)>::new(move |e: MessageEvent| {
+            if let Ok(txt) = e.data().dyn_into::<js_sys::JsString>() {
+                let txt: String = txt.into();
+                // Push to global queue
+                CMD_QUEUE.with(|q| q.borrow_mut().push(txt));
+            }
+        });
+        
+        ws.set_onmessage(Some(onmessage_callback.as_ref().unchecked_ref()));
+        onmessage_callback.forget(); // Leak memory to keep handler alive
+        
+        Ok(())
+    }
+
     pub fn step(&mut self) {
+        // Process Commands
+        CMD_QUEUE.with(|q| {
+            let mut queue = q.borrow_mut();
+            for cmd_str in queue.drain(..) {
+                if let Ok(cmd) = serde_json::from_str::<SimCommand>(&cmd_str) {
+                    match cmd.cmd.as_str() {
+                        "spawn_box" => self.physics.spawn_box(cmd.x.unwrap_or(0.0), cmd.y.unwrap_or(5.0), cmd.z.unwrap_or(0.0)),
+                        "spawn_sphere" => self.physics.spawn_sphere(cmd.x.unwrap_or(0.0), cmd.y.unwrap_or(5.0), cmd.z.unwrap_or(0.0)),
+                        "spawn_liquid" => self.physics.spawn_liquid(cmd.x.unwrap_or(0.0), cmd.y.unwrap_or(5.0), cmd.z.unwrap_or(0.0)),
+                        "spawn_cloth" => self.physics.spawn_cloth(cmd.x.unwrap_or(0.0), cmd.y.unwrap_or(5.0), cmd.z.unwrap_or(0.0), 10, 10),
+                        _ => log(&format!("Unknown command: {}", cmd.cmd)),
+                    }
+                }
+            }
+        });
+
         self.physics.step();
         
         if let Some(renderer) = &mut self.renderer {

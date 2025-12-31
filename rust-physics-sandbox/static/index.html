@@ -48,6 +48,14 @@
             sim.spawn_floor();
             sim.spawn_sphere(0, 5, 0);
             
+            // Connect to Orchestrator
+            try {
+                sim.connect_orchestrator();
+                console.log("Connected to Orchestrator");
+            } catch (e) {
+                console.warn("Orchestrator not found (is the python script running?)", e);
+            }
+            
             // Camera Controls
             const canvas = document.getElementById('simCanvas');
             let isDragging = false;

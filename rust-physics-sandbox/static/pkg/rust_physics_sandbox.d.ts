@@ -14,6 +14,9 @@ export class Simulation {
   init_graphics(canvas_id: string): Promise<void>;
 /**
 */
+  connect_orchestrator(): void;
+/**
+*/
   step(): void;
 /**
 * @param {number} x
@@ -66,6 +69,7 @@ export interface InitOutput {
   readonly __wbg_simulation_free: (a: number) => void;
   readonly simulation_new: () => number;
   readonly simulation_init_graphics: (a: number, b: number, c: number) => number;
+  readonly simulation_connect_orchestrator: (a: number, b: number) => void;
   readonly simulation_step: (a: number) => void;
   readonly simulation_spawn_box: (a: number, b: number, c: number, d: number) => void;
   readonly simulation_spawn_sphere: (a: number, b: number, c: number, d: number) => void;
@@ -127,8 +131,10 @@ export interface InitOutput {
   readonly __wbindgen_malloc: (a: number, b: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
   readonly __wbindgen_export_2: WebAssembly.Table;
-  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h1533e8c6290090b9: (a: number, b: number, c: number) => void;
+  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h1994293d9880de53: (a: number, b: number, c: number) => void;
+  readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__ha87af45e5c1de106: (a: number, b: number, c: number) => void;
   readonly _dyn_core__ops__function__FnMut__A____Output___R_as_wasm_bindgen__closure__WasmClosure___describe__invoke__h8de0d81ae1425af5: (a: number, b: number, c: number) => void;
+  readonly __wbindgen_add_to_stack_pointer: (a: number) => number;
   readonly __wbindgen_exn_store: (a: number) => void;
   readonly wasm_bindgen__convert__closures__invoke2_mut__h1cb519eab5677b7b: (a: number, b: number, c: number, d: number) => void;
 }
