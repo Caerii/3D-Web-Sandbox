@@ -42,9 +42,13 @@
 ## Running with Elide (Orchestration Mode)
 
 1.  Ensure you have **Elide** (GraalVM based runtime) installed.
-2.  Navigate to the `elide` directory.
-3.  Run the orchestrator:
+2.  Install `uv` (Fast Python Package Installer):
     ```bash
-    elide run orchestrator.py
+    curl -LsSf https://astral.sh/uv/install.sh | sh
     ```
-    *Note: The current `orchestrator.py` is a mock. To fully enable WASM loading in Elide, ensure your Elide version supports the Polyglot WASM API and modify the script to load `../target/.../rust_physics_sandbox.wasm`.*
+3.  Navigate to the `elide` directory.
+4.  Run the orchestrator using `uv`:
+    ```bash
+    uv run orchestrator.py
+    ```
+    *Note: The script automatically detects if it is running in a standard Python environment (and runs in mock mode) or in Elide (where it attempts to load the WASM module).*

@@ -88,6 +88,27 @@ impl PhysicsWorld {
         self.object_types.insert(body_handle, 0); // Floor is also a box shape
     }
 
+    pub fn spawn_sphere(&mut self, x: f32, y: f32, z: f32) {
+        let rigid_body = RigidBodyBuilder::dynamic()
+            .translation(vector![x, y, z])
+            .build();
+        let collider = ColliderBuilder::ball(0.5).restitution(0.7).build();
+        let body_handle = self.rigid_body_set.insert(rigid_body);
+        self.collider_set.insert_with_parent(collider, body_handle, &mut self.rigid_body_set);
+        self.object_types.insert(body_handle, 1); // 1 = Sphere
+    }
+
+    // Helper for Elide agent to inspect state
+    // Just returns the Y position of the first dynamic object found (for simple testing)
+    pub fn get_first_object_y(&self) -> f32 {
+        for (_handle, body) in self.rigid_body_set.iter() {
+            if body.is_dynamic() {
+                return body.translation().y;
+            }
+        }
+        0.0
+    }
+
     // Returns a flattened list of transforms: [x,y,z, qx,qy,qz,qw, type, ...]
     pub fn get_render_data(&self) -> Vec<f32> {
         let mut data = Vec::with_capacity(self.rigid_body_set.len() * 8);

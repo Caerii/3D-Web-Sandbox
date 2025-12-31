@@ -1,31 +1,101 @@
 import time
 
-# In a real Elide context, we would load the WASM module using the Polyglot API
-# import polyglot
-# wasm_source = polyglot.eval(file="pkg/rust_physics_sandbox.wasm", mime_type="application/wasm")
-# sim = wasm_source.Simulation()
+# NOTE: This script is designed to run in the Elide runtime (GraalVM).
+# Elide provides the 'polyglot' module implicitly or via import if configured.
+# If running locally with Python (CPython), this will fail unless we mock it.
 
-class MockSimulation:
-    def spawn_box(self, x, y, z):
-        print(f"Python Agent: Spawning box at ({x}, {y}, {z})")
-    
-    def step(self):
-        # In real integration, this calls the Rust step function
-        pass
+try:
+    import polyglot
+except ImportError:
+    print("Warning: 'polyglot' module not found. Running in mock mode.")
+    class MockPolyglot:
+        def eval(self, file, mime_type):
+            print(f"Loading {file} as {mime_type}...")
+            return MockSource()
+            
+    class MockSource:
+        def instantiate(self):
+            return MockInstance()
+            
+    class MockInstance:
+        def Simulation(self):
+            return MockSim()
+            
+    class MockSim:
+        def spawn_box(self, x, y, z):
+            print(f"Rust: spawn_box({x}, {y}, {z})")
+        def spawn_sphere(self, x, y, z):
+            print(f"Rust: spawn_sphere({x}, {y}, {z})")
+        def spawn_floor(self):
+            print("Rust: spawn_floor()")
+        def step(self):
+            pass
+        def get_first_object_y(self):
+            return 5.0
+
+    polyglot = MockPolyglot()
 
 def main():
-    print("Starting Elide Orchestrator...")
-    sim = MockSimulation()
+    print("Initializing Elide Orchestrator...")
+    
+    # Load the Rust WASM module
+    # In a real Elide env, path might need adjustment relative to working dir
+    wasm_path = "../target/wasm32-unknown-unknown/release/rust_physics_sandbox.wasm"
+    
+    try:
+        source = polyglot.eval(file=wasm_path, mime_type="application/wasm")
+    except Exception as e:
+        # Fallback path if running from inside elide dir
+        wasm_path = "target/wasm32-unknown-unknown/release/rust_physics_sandbox.wasm"
+        # In mock mode, the file read isn't real, but real polyglot reads bytes or file path
+        # Actually polyglot.eval(path=...) or polyglot.eval(string=...)
+        # For WASM, GraalWasm supports loading binary.
+        print(f"Assuming WASM loaded from {wasm_path}")
+        source = polyglot.eval(file=wasm_path, mime_type="application/wasm")
+
+    # Instantiate the module
+    # Note: WASM modules in Graal usually export a 'main' or the exports object.
+    # If using wasm-bindgen, the exports are a bit different (memory, functions).
+    # However, Elide/GraalWasm can bridge this. 
+    # For this demo, we assume the high-level class 'Simulation' is accessible 
+    # (which requires binding support in the runtime or manual export mapping).
+    # Since wasm-bindgen produces a JS wrapper, pure WASM usage in Polyglot 
+    # typically accesses raw exports like 'new_simulation' (mangled name) 
+    # or requires the JS wrapper to be loaded in a JS context that calls Python.
+    
+    # Simpler approach for pure Polyglot: Treat WASM as library.
+    instance = source.instantiate()
+    
+    # In raw WASM (without JS glue), we'd call exports directly.
+    # Our Rust code wraps things in a class 'Simulation'. 
+    # The raw exports will have functions like 'simulation_new', 'simulation_step'.
+    # For the sake of the demo script, we assume a clean binding.
+    
+    sim = instance.Simulation() 
+    sim.spawn_floor()
+    sim.spawn_sphere(0, 10, 0)
+    
+    print("Simulation started.")
     
     # Agent Loop
-    while True:
+    count = 0
+    while count < 100: # Limit loop for testing
         sim.step()
         
-        # Example logic: Every 60 ticks, spawn a box
-        if int(time.time() * 60) % 60 == 0:
-            sim.spawn_box(0, 10, 0)
+        # Read sensor data from Rust
+        y_pos = sim.get_first_object_y()
         
-        time.sleep(1/60)
+        # Simple Logic: If object falls below 0, respawn it high
+        if y_pos < -5.0:
+            print("Agent: Object fell off world! Respawning...")
+            sim.spawn_sphere(0, 10, 0)
+        
+        # Log occasionally
+        if count % 20 == 0:
+            print(f"Agent: Object Y={y_pos:.2f}")
+        
+        time.sleep(0.016) # ~60 FPS
+        count += 1
 
 if __name__ == "__main__":
     main()

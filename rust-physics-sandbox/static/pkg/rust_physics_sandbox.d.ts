@@ -21,6 +21,19 @@ export class Simulation {
 * @param {number} z
 */
   spawn_box(x: number, y: number, z: number): void;
+/**
+* @param {number} x
+* @param {number} y
+* @param {number} z
+*/
+  spawn_sphere(x: number, y: number, z: number): void;
+/**
+*/
+  spawn_floor(): void;
+/**
+* @returns {number}
+*/
+  get_first_object_y(): number;
 }
 
 export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembly.Module;
@@ -32,6 +45,9 @@ export interface InitOutput {
   readonly simulation_init_graphics: (a: number, b: number, c: number) => number;
   readonly simulation_step: (a: number) => void;
   readonly simulation_spawn_box: (a: number, b: number, c: number, d: number) => void;
+  readonly simulation_spawn_sphere: (a: number, b: number, c: number, d: number) => void;
+  readonly simulation_spawn_floor: (a: number) => void;
+  readonly simulation_get_first_object_y: (a: number) => number;
   readonly wgpu_compute_pass_set_pipeline: (a: number, b: number) => void;
   readonly wgpu_compute_pass_set_bind_group: (a: number, b: number, c: number, d: number, e: number) => void;
   readonly wgpu_compute_pass_set_push_constant: (a: number, b: number, c: number, d: number) => void;

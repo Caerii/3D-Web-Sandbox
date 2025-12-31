@@ -1,0 +1,12 @@
+[project]
+name = "elide-orchestrator"
+version = "0.1.0"
+description = "Python agent for controlling the Rust physics sandbox"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "pytest>=7.0",
+]
