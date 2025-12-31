@@ -65,4 +65,20 @@ impl Simulation {
     pub fn get_first_object_y(&self) -> f32 {
         self.physics.get_first_object_y()
     }
+    
+    pub fn update_camera(&mut self, dx: f32, dy: f32, zoom: f32) {
+        if let Some(renderer) = &mut self.renderer {
+            renderer.update_camera(dx, dy, zoom);
+        }
+    }
+    
+    pub fn handle_click(&mut self, x: f32, y: f32) {
+        if let Some(renderer) = &self.renderer {
+            let (origin, dir) = renderer.get_ray_from_screen(x, y);
+            if let Some(handle) = self.physics.cast_ray(origin.x, origin.y, origin.z, dir.x, dir.y, dir.z) {
+                // For now, just apply a vertical impulse to the clicked object to show selection
+                self.physics.apply_impulse(handle, 0.0, 5.0, 0.0);
+            }
+        }
+    }
 }

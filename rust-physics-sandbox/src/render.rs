@@ -83,6 +83,12 @@ pub struct Renderer {
     camera_bind_group: wgpu::BindGroup,
     depth_texture: wgpu::Texture,
     instance_capacity: usize,
+    
+    // Camera state
+    camera_azimuth: f32,
+    camera_altitude: f32,
+    camera_radius: f32,
+    camera_target: [f32; 3],
 }
 
 impl Renderer {
@@ -307,7 +313,61 @@ impl Renderer {
             camera_bind_group,
             depth_texture,
             instance_capacity,
+            
+            camera_azimuth: 0.0,
+            camera_altitude: 0.5, // radians, slightly looking down
+            camera_radius: 20.0,
+            camera_target: [0.0, 0.0, 0.0],
         })
+    }
+    
+    pub fn update_camera(&mut self, dx: f32, dy: f32, zoom: f32) {
+        // Sensitivity factors
+        let rotate_speed = 0.005;
+        let zoom_speed = 0.1;
+        
+        self.camera_azimuth -= dx * rotate_speed;
+        self.camera_altitude = (self.camera_altitude + dy * rotate_speed).clamp(0.1, 1.5); // Prevent flipping
+        self.camera_radius = (self.camera_radius + zoom * zoom_speed).clamp(2.0, 100.0);
+    }
+
+    pub fn get_ray_from_screen(&self, x: f32, y: f32) -> (nalgebra::Point3<f32>, nalgebra::Vector3<f32>) {
+        let width = self.config.width as f32;
+        let height = self.config.height as f32;
+        
+        // NDC coordinates (-1 to 1)
+        let ndc_x = (2.0 * x / width) - 1.0;
+        let ndc_y = 1.0 - (2.0 * y / height);
+        
+        let aspect = width / height;
+        let proj = nalgebra::Perspective3::new(aspect, 45.0_f32.to_radians(), 0.1, 100.0);
+        let target = nalgebra::Point3::new(self.camera_target[0], self.camera_target[1], self.camera_target[2]);
+        
+        let cx = self.camera_radius * self.camera_altitude.cos() * self.camera_azimuth.sin();
+        let cy = self.camera_radius * self.camera_altitude.sin();
+        let cz = self.camera_radius * self.camera_altitude.cos() * self.camera_azimuth.cos();
+        
+        let eye = nalgebra::Point3::new(cx, cy, cz) + target.coords;
+        let view = nalgebra::Isometry3::look_at_rh(&eye, &target, &nalgebra::Vector3::y());
+        
+        let view_proj = proj.as_matrix() * view.to_homogeneous();
+        let inv_view_proj = view_proj.try_inverse().unwrap_or_else(nalgebra::Matrix4::identity);
+        
+        // Near plane point (z = -1 in NDC for wgpu? No, wgpu is 0 to 1 for z. But clip space is often -1 to 1 or 0 to 1 depending on API)
+        // WGPU uses 0 to 1 depth in NDC.
+        // Let's use 0.0 and 1.0
+        let point_ndc_near = nalgebra::Vector4::new(ndc_x, ndc_y, 0.0, 1.0);
+        let point_ndc_far = nalgebra::Vector4::new(ndc_x, ndc_y, 1.0, 1.0);
+        
+        let point_world_near = inv_view_proj * point_ndc_near;
+        let point_world_far = inv_view_proj * point_ndc_far;
+        
+        let near = nalgebra::Point3::from_homogeneous(point_world_near).unwrap();
+        let far = nalgebra::Point3::from_homogeneous(point_world_far).unwrap();
+        
+        let dir = (far - near).normalize();
+        
+        (near, dir)
     }
 
     pub fn render(&mut self, physics: &PhysicsWorld) {
@@ -341,13 +401,15 @@ impl Renderer {
         }
 
         // 2. Update Camera (Orbital)
-        // Hardcoded orbit for now, user input can modulate this
         let aspect = self.config.width as f32 / self.config.height as f32;
         let proj = nalgebra::Perspective3::new(aspect, 45.0_f32.to_radians(), 0.1, 100.0);
-        let target = nalgebra::Point3::new(0.0, 0.0, 0.0);
-        // Simple rotation
-        let t = (web_sys::window().unwrap().performance().unwrap().now() / 1000.0) as f32;
-        let eye = nalgebra::Point3::new(t.sin() * 20.0, 10.0, t.cos() * 20.0);
+        let target = nalgebra::Point3::new(self.camera_target[0], self.camera_target[1], self.camera_target[2]);
+        
+        let x = self.camera_radius * self.camera_altitude.cos() * self.camera_azimuth.sin();
+        let y = self.camera_radius * self.camera_altitude.sin();
+        let z = self.camera_radius * self.camera_altitude.cos() * self.camera_azimuth.cos();
+        
+        let eye = nalgebra::Point3::new(x, y, z) + target.coords;
         let view = nalgebra::Isometry3::look_at_rh(&eye, &target, &nalgebra::Vector3::y());
         
         let view_proj = (proj.as_matrix() * view.to_homogeneous()).transpose(); // Transpose for WGSL (column-major)

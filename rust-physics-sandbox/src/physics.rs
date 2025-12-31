@@ -1,12 +1,12 @@
 use rapier3d::prelude::*;
 use std::collections::HashMap;
 use salva3d::integrations::rapier::FluidsPipeline;
-use salva3d::LiquidWorld;
 use salva3d::object::{Fluid, FluidHandle};
 use nalgebra::Point3;
 
 pub struct PhysicsWorld {
     pub pipeline: PhysicsPipeline,
+    pub query_pipeline: QueryPipeline,
     pub gravity: Vector<Real>,
     pub integration_parameters: IntegrationParameters,
     pub island_manager: IslandManager,
@@ -52,6 +52,7 @@ impl PhysicsWorld {
 
         Self {
             pipeline: PhysicsPipeline::new(),
+            query_pipeline: QueryPipeline::new(),
             gravity: vector![0.0, -9.81, 0.0],
             integration_parameters: IntegrationParameters::default(),
             island_manager: IslandManager::new(),
@@ -74,6 +75,9 @@ impl PhysicsWorld {
         let physics_hooks = ();
         let event_handler = ();
         
+        // Update query pipeline
+        self.query_pipeline.update(&self.rigid_body_set, &self.collider_set);
+
         // Step Rigid Body Physics
         self.pipeline.step(
             &self.gravity,
@@ -154,7 +158,58 @@ impl PhysicsWorld {
         fluid.add_particles(&particles, None);
     }
 
-    // Helper for Elide agent to inspect state
+    pub fn cast_ray(&self, origin_x: f32, origin_y: f32, origin_z: f32, dir_x: f32, dir_y: f32, dir_z: f32) -> Option<u32> {
+        let ray = Ray::new(
+            point![origin_x, origin_y, origin_z],
+            vector![dir_x, dir_y, dir_z],
+        );
+        let max_toi = 100.0;
+        let solid = true;
+        let query_filter = QueryFilter::default().groups(InteractionGroups::all());
+
+        if let Some((handle, _toi)) = self.query_pipeline.cast_ray(
+            &self.rigid_body_set,
+            &self.collider_set,
+            &ray,
+            max_toi,
+            solid,
+            query_filter,
+        ) {
+            // We return the handle as u32. 
+            // RigidBodyHandle in Rapier is generational index, but we can just use the index part for simplicity if we trust generation match
+            // Or better, we return the index. 
+            // Rapier's handles are (index, generation). 
+            // For now, let's just return the raw index, assuming we won't have generation conflicts in this simple demo.
+            return Some(handle.into_raw_parts().0);
+        }
+        None
+    }
+    pub fn apply_impulse(&mut self, handle_idx: u32, x: f32, y: f32, z: f32) {
+        // Reconstruct handle (assuming generation 0 or iterating to find match, but for now we try constructing from raw parts)
+        // Rapier handle is (index, generation). We guess generation 0.
+        // A safer way is to store handles in a map, but we don't have that map inverse.
+        // Let's iterate and find the body with this index.
+        
+        // Actually, rigid_body_set.get_mut takes a RigidBodyHandle.
+        // We need to know the generation.
+        // Hack: Assume we passed the raw parts correctly or find it.
+        
+        // Better approach: Iterate and match index.
+        let mut target_handle = None;
+        for (h, _b) in self.rigid_body_set.iter() {
+            if h.into_raw_parts().0 == handle_idx {
+                target_handle = Some(h);
+                break;
+            }
+        }
+        
+        if let Some(h) = target_handle {
+            if let Some(body) = self.rigid_body_set.get_mut(h) {
+                body.apply_impulse(vector![x, y, z], true);
+            }
+        }
+    }
+
     // Just returns the Y position of the first dynamic object found (for simple testing)
     pub fn get_first_object_y(&self) -> f32 {
         for (_handle, body) in self.rigid_body_set.iter() {

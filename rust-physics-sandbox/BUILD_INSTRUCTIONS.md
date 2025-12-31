@@ -38,6 +38,11 @@
     `http://localhost:8080`
 
     You should see the simulation running. Click "Spawn Box" to add objects.
+    
+    **Interactive Controls:**
+    *   **Rotate Camera**: Click and drag on the canvas.
+    *   **Zoom**: Mouse wheel.
+    *   **Pick Object**: Click on an object to apply an upward impulse (jump).
 
 ## Running with Elide (Orchestration Mode)
 

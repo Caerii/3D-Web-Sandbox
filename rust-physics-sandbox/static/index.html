@@ -41,6 +41,44 @@
             // Add initial floor and sphere
             sim.spawn_floor();
             sim.spawn_sphere(0, 5, 0);
+            
+            // Camera Controls
+            const canvas = document.getElementById('simCanvas');
+            let isDragging = false;
+            let lastX = 0;
+            let lastY = 0;
+            
+            canvas.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                lastX = e.clientX;
+                lastY = e.clientY;
+                
+                // Handle clicking (picking)
+                // Note: we might want to distinguish click vs drag, but for now click is fine
+                // Pass coordinates to Rust
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                sim.handle_click(x, y);
+            });
+            
+            window.addEventListener('mouseup', () => {
+                isDragging = false;
+            });
+            
+            canvas.addEventListener('mousemove', (e) => {
+                if (isDragging) {
+                    const dx = e.clientX - lastX;
+                    const dy = e.clientY - lastY;
+                    sim.update_camera(dx, dy, 0);
+                    lastX = e.clientX;
+                    lastY = e.clientY;
+                }
+            });
+            
+            canvas.addEventListener('wheel', (e) => {
+                sim.update_camera(0, 0, e.deltaY * 0.05);
+            });
 
             function loop() {
                 sim.step();

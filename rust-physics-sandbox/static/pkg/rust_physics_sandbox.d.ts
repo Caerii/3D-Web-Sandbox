@@ -40,6 +40,17 @@ export class Simulation {
 * @returns {number}
 */
   get_first_object_y(): number;
+/**
+* @param {number} dx
+* @param {number} dy
+* @param {number} zoom
+*/
+  update_camera(dx: number, dy: number, zoom: number): void;
+/**
+* @param {number} x
+* @param {number} y
+*/
+  handle_click(x: number, y: number): void;
 }
 
 export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembly.Module;
@@ -55,6 +66,8 @@ export interface InitOutput {
   readonly simulation_spawn_floor: (a: number) => void;
   readonly simulation_spawn_liquid: (a: number, b: number, c: number, d: number) => void;
   readonly simulation_get_first_object_y: (a: number) => number;
+  readonly simulation_update_camera: (a: number, b: number, c: number, d: number) => void;
+  readonly simulation_handle_click: (a: number, b: number, c: number) => void;
   readonly wgpu_compute_pass_set_pipeline: (a: number, b: number) => void;
   readonly wgpu_compute_pass_set_bind_group: (a: number, b: number, c: number, d: number, e: number) => void;
   readonly wgpu_compute_pass_set_push_constant: (a: number, b: number, c: number, d: number) => void;
