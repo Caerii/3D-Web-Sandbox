@@ -133,11 +133,11 @@ impl PhysicsWorld {
     }
     
     pub fn spawn_floor(&mut self) {
-        let rigid_body = RigidBodyBuilder::fixed().build();
-        let collider = ColliderBuilder::cuboid(100.0, 0.1, 100.0).build();
+        let rigid_body = RigidBodyBuilder::fixed().translation(vector![0.0, -1.0, 0.0]).build();
+        let collider = ColliderBuilder::cuboid(100.0, 1.0, 100.0).build();
         let body_handle = self.rigid_body_set.insert(rigid_body);
         self.collider_set.insert_with_parent(collider, body_handle, &mut self.rigid_body_set);
-        self.object_types.insert(body_handle, 0); // Floor is also a box shape
+        self.object_types.insert(body_handle, 4); // 4 = Floor
     }
 
     pub fn spawn_sphere(&mut self, x: f32, y: f32, z: f32) {
