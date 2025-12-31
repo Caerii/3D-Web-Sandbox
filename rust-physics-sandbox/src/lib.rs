@@ -99,6 +99,8 @@ impl Simulation {
                         "spawn_sphere" => self.physics.spawn_sphere(cmd.x.unwrap_or(0.0), cmd.y.unwrap_or(5.0), cmd.z.unwrap_or(0.0)),
                         "spawn_liquid" => self.physics.spawn_liquid(cmd.x.unwrap_or(0.0), cmd.y.unwrap_or(5.0), cmd.z.unwrap_or(0.0)),
                         "spawn_cloth" => self.physics.spawn_cloth(cmd.x.unwrap_or(0.0), cmd.y.unwrap_or(5.0), cmd.z.unwrap_or(0.0), 10, 10),
+                        "spawn_avalanche" => self.physics.spawn_avalanche(cmd.x.unwrap_or(0.0), cmd.y.unwrap_or(5.0), cmd.z.unwrap_or(0.0)),
+                        "spawn_tsunami" => self.physics.spawn_tsunami(cmd.x.unwrap_or(0.0), cmd.y.unwrap_or(5.0), cmd.z.unwrap_or(0.0)),
                         _ => log(&format!("Unknown command: {}", cmd.cmd)),
                     }
                 }
@@ -132,6 +134,14 @@ impl Simulation {
     
     pub fn spawn_cloth(&mut self, x: f32, y: f32, z: f32) {
         self.physics.spawn_cloth(x, y, z, 10, 10);
+    }
+
+    pub fn spawn_avalanche(&mut self, x: f32, y: f32, z: f32) {
+        self.physics.spawn_avalanche(x, y, z);
+    }
+    
+    pub fn spawn_tsunami(&mut self, x: f32, y: f32, z: f32) {
+        self.physics.spawn_tsunami(x, y, z);
     }
 
     pub fn get_first_object_y(&self) -> f32 {

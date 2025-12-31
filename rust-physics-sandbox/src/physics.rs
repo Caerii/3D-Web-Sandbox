@@ -180,6 +180,46 @@ impl PhysicsWorld {
         self.soft_body.create_cloth(width, height, spacing, offset);
     }
 
+    pub fn spawn_avalanche(&mut self, x: f32, y: f32, z: f32) {
+        let count = 500;
+        let spacing = 0.6;
+        let row = 10;
+        
+        for i in 0..count {
+            let rx = (i % row) as f32 * spacing;
+            let ry = (i / (row * row)) as f32 * spacing;
+            let rz = ((i / row) % row) as f32 * spacing;
+            
+            // Add some jitter
+            let jitter_x = (i % 3) as f32 * 0.1;
+            
+            self.spawn_box(x + rx + jitter_x, y + ry, z + rz);
+        }
+    }
+    
+    pub fn spawn_tsunami(&mut self, x: f32, y: f32, z: f32) {
+        // 2000 particles
+        let n_x = 10;
+        let n_y = 20;
+        let n_z = 10;
+        let d = 0.2;
+        let mut particles = Vec::new();
+        
+        for i in 0..n_x {
+            for j in 0..n_y {
+                for k in 0..n_z {
+                    particles.push(Point3::new(
+                        x + (i as f32) * d, 
+                        y + (j as f32) * d, 
+                        z + (k as f32) * d
+                    ));
+                }
+            }
+        }
+        let fluid = self.fluid_pipeline.liquid_world.fluids_mut().get_mut(self.fluid_handle).unwrap();
+        fluid.add_particles(&particles, None);
+    }
+
     pub fn cast_ray(&self, origin_x: f32, origin_y: f32, origin_z: f32, dir_x: f32, dir_y: f32, dir_z: f32) -> Option<u32> {
         let ray = Ray::new(
             point![origin_x, origin_y, origin_z],

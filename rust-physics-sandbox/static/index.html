@@ -16,6 +16,9 @@
         <button id="spawnBtn">Spawn Box</button>
         <button id="spawnWaterBtn">Spawn Water</button>
         <button id="spawnClothBtn">Spawn Cloth</button>
+        <hr/>
+        <button id="avalancheBtn" style="background: red;">AVALANCHE</button>
+        <button id="tsunamiBtn" style="background: blue;">TSUNAMI</button>
         <p>FPS: <span id="fps">0</span></p>
     </div>
     <canvas id="simCanvas"></canvas>
@@ -42,6 +45,14 @@
             const spawnClothBtn = document.getElementById('spawnClothBtn');
             spawnClothBtn.addEventListener('click', () => {
                 sim.spawn_cloth(2, 8, 0);
+            });
+            
+            document.getElementById('avalancheBtn').addEventListener('click', () => {
+                sim.spawn_avalanche(0, 10, 0);
+            });
+            
+            document.getElementById('tsunamiBtn').addEventListener('click', () => {
+                sim.spawn_tsunami(0, 10, 0);
             });
             
             // Add initial floor and sphere
